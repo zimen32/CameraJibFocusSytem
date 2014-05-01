@@ -44,10 +44,10 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>C:\Program Files (x86)\Arduino\hardware\arduino\cores\arduino;C:\Program Files (x86)\Arduino\hardware\arduino\variants\mega;C:\Program Files (x86)\Arduino\libraries\LiquidCrystal;C:\Program Files (x86)\Arduino\libraries\LiquidCrystal\utility;C:\Users\Piotr\Documents\Arduino\libraries\Keypad;C:\Users\Piotr\Documents\Arduino\libraries\Keypad\utility;C:\Program Files (x86)\Arduino\libraries;C:\Program Files (x86)\Arduino\hardware\arduino\libraries;C:\Program Files (x86)\Visual Micro\Visual Micro for Arduino\Micro Platforms\default\debuggers;C:\Users\Piotr\Documents\Arduino\libraries;c:\program files (x86)\arduino\hardware\tools\avr\avr\include\;c:\program files (x86)\arduino\hardware\tools\avr\avr\include\avr\;c:\program files (x86)\arduino\hardware\tools\avr\avr\;c:\program files (x86)\arduino\hardware\tools\avr\lib\gcc\avr\4.3.2\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Program Files (x86)\Arduino\hardware\arduino\cores\arduino;C:\Program Files (x86)\Arduino\hardware\arduino\variants\mega;C:\Program Files (x86)\Arduino\libraries\LiquidCrystal;C:\Program Files (x86)\Arduino\libraries\LiquidCrystal\utility;C:\Users\Piotr\Documents\Arduino\libraries\Keypad;C:\Users\Piotr\Documents\Arduino\libraries\Keypad\utility;C:\Program Files (x86)\Arduino\libraries\EEPROM;C:\Program Files (x86)\Arduino\libraries\EEPROM\utility;C:\Program Files (x86)\Arduino\libraries\Wire;C:\Program Files (x86)\Arduino\libraries\Wire\utility;C:\Users\Piotr\Documents\Arduino\libraries\L3G;C:\Users\Piotr\Documents\Arduino\libraries\L3G\utility;C:\Users\Piotr\Documents\Arduino\libraries\LSM303;C:\Users\Piotr\Documents\Arduino\libraries\LSM303\utility;C:\Program Files (x86)\Arduino\libraries;C:\Program Files (x86)\Arduino\hardware\arduino\libraries;C:\Program Files (x86)\Visual Micro\Visual Micro for Arduino\Micro Platforms\default\debuggers;C:\Users\Piotr\Documents\Arduino\libraries;c:\program files (x86)\arduino\hardware\tools\avr\avr\include\;c:\program files (x86)\arduino\hardware\tools\avr\avr\include\avr\;c:\program files (x86)\arduino\hardware\tools\avr\avr\;c:\program files (x86)\arduino\hardware\tools\avr\lib\gcc\avr\4.3.2\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ForcedIncludeFiles>O:\Dropbox\Dropbox\Praca magisterska\CameraJibFocusSytem\FocusFollower\LCDKeypad\Visual Micro\.LCDKeypad.vsarduino.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
       <IgnoreStandardIncludePath>true</IgnoreStandardIncludePath>
-      <PreprocessorDefinitions>__AVR_ATmega2560__;_VMDEBUG=1;ARDUINO=105;ARDUINO_MAIN;__AVR__;__avr__;F_CPU=16000000L;__cplusplus;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>__AVR_ATmega2560__;ARDUINO=105;ARDUINO_MAIN;__AVR__;__avr__;F_CPU=16000000L;__cplusplus;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -73,14 +73,26 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Encoder.h" />
     <ClInclude Include="Helpers.h">
       <FileType>CppCode</FileType>
     </ClInclude>
+    <ClInclude Include="LSM303.h" />
+    <ClInclude Include="Menu.h" />
     <ClInclude Include="Steps.h" />
     <ClInclude Include="Visual Micro\.LCDKeypad.vsarduino.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Encoder.cpp" />
     <ClCompile Include="Helpers.cpp" />
+    <ClCompile Include="I2C.cpp" />
+    <ClCompile Include="L3G.cpp" />
+    <ClCompile Include="LPS331.cpp" />
+    <ClCompile Include="LSM303.cpp" />
+    <ClCompile Include="matrix.cpp" />
+    <ClCompile Include="Menu.cpp" />
+    <ClCompile Include="Output.cpp" />
+    <ClCompile Include="Vector.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

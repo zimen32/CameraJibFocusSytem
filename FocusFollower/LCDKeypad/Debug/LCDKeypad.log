@@ -1,0 +1,13 @@
+﻿Build started 2014-05-10 23:52:44.
+     1>Project "O:\Dropbox\Dropbox\Praca magisterska\CameraJibFocusSytem\FocusFollower\LCDKeypad\LCDKeypad.vcxproj" on node 2 (ClCompile target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I"C:\Program Files (x86)\Arduino\hardware\arduino\cores\arduino" /I"C:\Program Files (x86)\Arduino\hardware\arduino\variants\mega" /I"C:\Program Files (x86)\Arduino\libraries\LiquidCrystal" /I"C:\Program Files (x86)\Arduino\libraries\LiquidCrystal\utility" /IC:\Users\Piotr\Documents\Arduino\libraries\Keypad /IC:\Users\Piotr\Documents\Arduino\libraries\Keypad\utility /I"C:\Program Files (x86)\Arduino\libraries\EEPROM" /I"C:\Program Files (x86)\Arduino\libraries\EEPROM\utility" /I"C:\Program Files (x86)\Arduino\libraries" /I"C:\Program Files (x86)\Arduino\hardware\arduino\libraries" /I"C:\Program Files (x86)\Visual Micro\Visual Micro for Arduino\Micro Platforms\default\debuggers" /IC:\Users\Piotr\Documents\Arduino\libraries /I"c:\program files (x86)\arduino\hardware\tools\avr\avr\include\\" /I"c:\program files (x86)\arduino\hardware\tools\avr\avr\include\avr\\" /I"c:\program files (x86)\arduino\hardware\tools\avr\avr\\" /I"c:\program files (x86)\arduino\hardware\tools\avr\lib\gcc\avr\4.3.2\include\\" /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D __AVR_ATmega2560__ /D ARDUINO=105 /D ARDUINO_MAIN /D __AVR__ /D __avr__ /D F_CPU=16000000L /D __cplusplus /D _MBCS /X /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /FI"O:\Dropbox\Dropbox\Praca magisterska\CameraJibFocusSytem\FocusFollower\LCDKeypad\Visual Micro\.LCDKeypad.vsarduino.h" /analyze- /errorReport:prompt DCM.cpp
+         DCM.cpp
+     1>c1xx : warning C4117: macro name '__cplusplus' is reserved, '#define' ignored
+     1>o:\dropbox\dropbox\praca magisterska\camerajibfocussytem\focusfollower\lcdkeypad\dcm.cpp : fatal error C1041: cannot open program database 'o:\dropbox\dropbox\praca magisterska\camerajibfocussytem\focusfollower\lcdkeypad\debug\vc120.idb'; if multiple CL.EXE write to the same .PDB file, please use /FS
+     1>cl : Command line warning D9028: minimal rebuild failure, reverting to normal build
+     1>Done Building Project "O:\Dropbox\Dropbox\Praca magisterska\CameraJibFocusSytem\FocusFollower\LCDKeypad\LCDKeypad.vcxproj" (ClCompile target(s)) -- FAILED.
+
+Build FAILED.
+
+Time Elapsed 00:00:00.65

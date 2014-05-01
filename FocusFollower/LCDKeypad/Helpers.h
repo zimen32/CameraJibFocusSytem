@@ -18,5 +18,11 @@ public:
 
 	//Math helpers
 	static float calculateArcLength(float radius, float startAngle, float currentAngle);
+
+	//EEPROM
+	static void EEPROMWriteInt(int address, int value);
+	 
+	static unsigned int EEPROMReadInt(int address);
+
 };
 

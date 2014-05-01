@@ -1,4 +1,5 @@
 #include "Helpers.h"
+#include <EEPROM.h>
 #include <Arduino.h>
 #include <LiquidCrystal.h>
 
@@ -26,14 +27,20 @@ void Helpers::textClear(char* text){
 	memset(text, 0, sizeof(text));
 }
 
-float Helpers::calculateEncDegrees(int encVal){
-	float deegree = (encVal - encMinVal) >= 0 ? (encVal - encMinVal) : 0;
 
-	deegree *= (float)360/(encMaxVal - encMinVal);
+void Helpers::EEPROMWriteInt(int address, int value){
+	byte lowByte = ((value >> 0) & 0xFF);
+	byte highByte = ((value >> 8) & 0xFF);
 
-	return deegree;
+	EEPROM.write(address, lowByte);
+	EEPROM.write(address + 1, highByte);
 }
 
-float Helpers::calculateArcLength(float radius, float startAngle, float currentAngle){
-	return 2.0 * PI * radius *abs(currentAngle - startAngle) / 360.0;
+
+unsigned int Helpers::EEPROMReadInt(int address){
+	byte lowByte = EEPROM.read(address);
+	byte highByte = EEPROM.read(address + 1);
+
+	return ((lowByte << 0) & 0xFF) + ((highByte << 8) & 0xFF00);
 }
+

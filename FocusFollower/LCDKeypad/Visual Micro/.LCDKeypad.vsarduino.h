@@ -11,7 +11,6 @@
 #ifndef _VSARDUINO_H_
 #define _VSARDUINO_H_
 #define __AVR_ATmega2560__
-#define _VMDEBUG 1
 #define ARDUINO 105
 #define ARDUINO_MAIN
 #define __AVR__
@@ -41,13 +40,36 @@ extern "C" void __cxa_pure_virtual() {;}
 
 //
 //
-void keypadEvent_num( KeypadEvent key );
-void swOnState( char key );
+void keypadEvent_num(KeypadEvent key);
+void swOnState(char key);
+void Compass_Heading();
+void Normalize(void);
+void Drift_correction(void);
+void Matrix_update(void);
+void Euler_angles(void);
+void I2C_Init();
+void Gyro_Init();
+void Read_Gyro();
+void Accel_Init();
+void Read_Accel();
+void Compass_Init();
+void Read_Compass();
+void Matrix_Multiply(float a[3][3], float b[3][3], float mat[3][3]);
+long convert_to_dec(float x);
+float Vector_Dot_Product(float vector1[3], float vector2[3]);
+void Vector_Cross_Product(float vectorOut[3], float v1[3], float v2[3]);
+void Vector_Scale(float vectorOut[3], float vectorIn[3], float scale2);
+void Vector_Add(float vectorOut[3], float vectorIn1[3], float vectorIn2[3]);
+void printdata(void);
 
 #include "C:\Program Files (x86)\Arduino\hardware\arduino\cores\arduino\arduino.h"
 #include "C:\Program Files (x86)\Arduino\hardware\arduino\variants\mega\pins_arduino.h" 
 #include "O:\Dropbox\Dropbox\Praca magisterska\CameraJibFocusSytem\FocusFollower\LCDKeypad\LCDKeypad.ino"
+#include "O:\Dropbox\Dropbox\Praca magisterska\CameraJibFocusSytem\FocusFollower\LCDKeypad\Encoder.cpp"
+#include "O:\Dropbox\Dropbox\Praca magisterska\CameraJibFocusSytem\FocusFollower\LCDKeypad\Encoder.h"
 #include "O:\Dropbox\Dropbox\Praca magisterska\CameraJibFocusSytem\FocusFollower\LCDKeypad\Helpers.cpp"
 #include "O:\Dropbox\Dropbox\Praca magisterska\CameraJibFocusSytem\FocusFollower\LCDKeypad\Helpers.h"
+#include "O:\Dropbox\Dropbox\Praca magisterska\CameraJibFocusSytem\FocusFollower\LCDKeypad\Menu.cpp"
+#include "O:\Dropbox\Dropbox\Praca magisterska\CameraJibFocusSytem\FocusFollower\LCDKeypad\Menu.h"
 #include "O:\Dropbox\Dropbox\Praca magisterska\CameraJibFocusSytem\FocusFollower\LCDKeypad\Steps.h"
 #endif
