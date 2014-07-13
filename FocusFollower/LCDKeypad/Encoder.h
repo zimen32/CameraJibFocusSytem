@@ -19,6 +19,7 @@ public:
 	float	GetArc();
 	float	GetChord();
 	float	GetHeadAngle();
+	float	GetBeta();
 	float	GetGamma();
 	float	GetEpsilon();
 	float	GetDelta();
@@ -28,7 +29,7 @@ public:
 	void	SetStartAngle();
 	void	SetHeadStartAngle();
 	void	SetStartDistance(float distance);
-
+	void	SetRelativeStartHeadAngle();
 
 	Encoder();
 	Encoder(int input);

@@ -77,7 +77,6 @@
     <ClInclude Include="Helpers.h">
       <FileType>CppCode</FileType>
     </ClInclude>
-    <ClInclude Include="LSM303.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="Steps.h" />
     <ClInclude Include="Visual Micro\.LCDKeypad.vsarduino.h" />
@@ -85,14 +84,7 @@
   <ItemGroup>
     <ClCompile Include="Encoder.cpp" />
     <ClCompile Include="Helpers.cpp" />
-    <ClCompile Include="I2C.cpp" />
-    <ClCompile Include="L3G.cpp" />
-    <ClCompile Include="LPS331.cpp" />
-    <ClCompile Include="LSM303.cpp" />
-    <ClCompile Include="matrix.cpp" />
     <ClCompile Include="Menu.cpp" />
-    <ClCompile Include="Output.cpp" />
-    <ClCompile Include="Vector.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

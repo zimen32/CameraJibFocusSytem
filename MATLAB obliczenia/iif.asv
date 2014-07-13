@@ -1,0 +1,8 @@
+function [ chord, beta, delta, gamma, epsilon, distance] = Calculate( ArmLength, StartAngle)
+
+    angle = [0:720];
+    
+
+    chord = angles(:)/2
+
+end

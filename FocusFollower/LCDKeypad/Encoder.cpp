@@ -20,38 +20,49 @@ Encoder::~Encoder(){
 }	
 
 float Encoder::GetAngle(){
-	float angle = (Value - MinValue) >= 0 ? (Value - MinValue) : 0;
+	float angle = (Value - MinValue) >= 1 ? (Value - MinValue) : 1;
 
 	angle *= (float)360 / (MaxValue - MinValue);
 
-	return angle;
+	return angle > 360 ? 360 : angle;
 }
 
 float Encoder::GetArc(){
-	return 2.0 * PI * ArmLength * abs((GetAngle() < StartAngle ? 360 + GetAngle() : GetAngle()) - StartAngle) / 360.0;
+	return 2.0 * PI * ArmLength * GetBeta() / 360.0;
 }
 
 float Encoder::GetChord(){
-	
-	return (ArmLength*sin(abs((GetAngle() < StartAngle ? 360 + GetAngle() : GetAngle()) - StartAngle) *PI / 180)) / sin((180 - abs((GetAngle() < StartAngle ? 360 + GetAngle() : GetAngle()) - StartAngle))*PI / 360);
+
+	float chord = (ArmLength*sin(GetBeta() *PI / 180)) / sin((180 - GetBeta())*PI / 360);
+
+	if (chord > 2*ArmLength)
+		chord = 2*ArmLength;
+
+	if (chord < 0)
+		chord = 0.0;
+
+	return chord;
 }
 
 float Encoder::GetHeadAngle(){
-	return (float) (RawHeadAngle - abs(GetAngle() + EncHeadXDiff));
+	return (float) -(RawHeadAngle - abs(GetAngle() + EncHeadXDiff));
 }
 
-float Encoder::GetDelta(){
-	//return abs(180.0 - abs(GetHeadAngle()));
-	return 180.0 - RelativeStartHeadAngle;
+float Encoder::GetDelta(){	
+	return abs(180.0 - RelativeStartHeadAngle);
 }
 
+float Encoder::GetBeta(){
+	float beta = abs((GetAngle() < StartAngle ? 360 + GetAngle() : GetAngle()) - StartAngle);
+	return  (beta < 180.1 && beta > 179.9) ? 179.9 : beta;
+}
 
 float Encoder::GetGamma(){
-	return  (180 - abs(GetAngle() - StartAngle) ) / 2;
+	return  (180 - GetBeta() ) / 2;
 }
 
 float Encoder::GetEpsilon(){
-	return 360 - GetGamma() - 180;// GetDelta();
+	return 360 - GetGamma() - GetDelta();
 }
 
 float Encoder::GetTX(){
@@ -61,51 +72,62 @@ float Encoder::GetTX(){
 float Encoder::GetDistance(){
 
 	float angle = GetAngle();
-	float beta = abs(angle - StartAngle);
-	float delta = 180;//GetDelta();
-	float gamma = (180 - beta) / 2;
-	float epsilon = 360 - gamma - delta;
 	float chord = GetChord();
+	float beta = GetBeta();
+	float delta = GetDelta();
+	float gamma = GetGamma();//(180 - beta) / 2;
+	float epsilon = GetEpsilon();// 360 - gamma - delta;
+	
 	
 	float distance = sqrt(pow(chord, 2) + pow(StartDistance, 2) - 2 * chord*StartDistance*cos(ToRad(epsilon)));
 
-	Serial.println(distance);
-	//Serial.print("Distance: ");
-	//Serial.print(distance);
-	//Serial.print("  ");
-	//Serial.print("Arnm length: ");
-	//Serial.print(ArmLength);
-	//Serial.print("  ");
-	//Serial.print("Enc angle: ");
-	//Serial.print(angle);
-	//Serial.print("  ");
-	//Serial.print("Start angle: ");
-	//Serial.print(StartAngle);
-	//Serial.print("  ");
-	//Serial.print("Beta: ");
-	//Serial.print(beta);
-	//Serial.print("  ");
-	//Serial.print("Start head angle: ");
-	//Serial.print(RelativeStartHeadAngle);
-	//Serial.print("  ");
-	//Serial.print("Start distance: ");
-	//Serial.print(StartDistance);
-	//Serial.print("  ");
-	//Serial.print("Delta: ");
-	//Serial.print(delta);
-	//Serial.print("  ");
-	//Serial.print("Gamma: ");
-	//Serial.println(gamma);
-	//Serial.print("  ");
-	//Serial.print("Epsilon: ");
-	//Serial.print(epsilon);
-	//Serial.print("  ");
-	//Serial.print("C: ");
-	//Serial.println(chord);
-	
-	
-	
+	// printing consistent with MatLab script
+	//Serial.print(chord); // chord
+	//Serial.print(",");
+	//Serial.print(beta); // beta
+	//Serial.print(",");
+	//Serial.print(gamma); // gamma
+	//Serial.print(",");
+	//Serial.print(epsilon); // epsilon
+	//Serial.print(",");
+	Serial.print(distance); // distance
+	Serial.print("\n");
 
+
+
+	/*Serial.print("Distance: ");
+	Serial.print(distance);
+	Serial.print("  ");
+	Serial.print("Arnm length: ");
+	Serial.print(ArmLength);
+	Serial.print("  ");
+	Serial.print("Enc angle: ");
+	Serial.print(angle);
+	Serial.print("  ");
+	Serial.print("Start angle: ");
+	Serial.print(StartAngle);
+	Serial.print("  ");
+	Serial.print("Beta: ");
+	Serial.print(beta);
+	Serial.print("  ");
+	Serial.print("Start head angle: ");
+	Serial.print(RelativeStartHeadAngle);
+	Serial.print("  ");
+	Serial.print("Start distance: ");
+	Serial.print(StartDistance);
+	Serial.print("  ");
+	Serial.print("Delta: ");
+	Serial.print(delta);
+	Serial.print("  ");
+	Serial.print("Gamma: ");
+	Serial.println(gamma);
+	Serial.print("  ");
+	Serial.print("Epsilon: ");
+	Serial.print(epsilon);
+	Serial.print("  ");
+	Serial.print("C: ");
+	Serial.println(chord);*/
+	
 	return distance;
 }
 
@@ -119,7 +141,10 @@ void Encoder::SetStartAngle(){
 
 void Encoder::SetHeadStartAngle(){
 	StartHeadAngle = RawHeadAngle;
-	EncHeadXDiff = StartHeadAngle - GetAngle();
+	EncHeadXDiff = StartHeadAngle - GetAngle();	
+}
+
+void Encoder::SetRelativeStartHeadAngle(){
 	RelativeStartHeadAngle = (float)GetHeadAngle();
 }
 

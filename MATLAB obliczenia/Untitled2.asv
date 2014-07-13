@@ -1,0 +1,15 @@
+clc
+ArmLength = 100;
+StartAngle = 340;
+angle = 0:0.1:360;
+
+chord = zeros(size(angle));
+
+for i = 1:length(angle) 
+    
+  chord(i) = GetChord(ArmLength,Sta );
+  
+end
+
+plot(chord);
+max(chord)

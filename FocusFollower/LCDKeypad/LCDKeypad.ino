@@ -120,6 +120,14 @@ float startDistance = 0.0;
 const int EEPROM_HORIZONTAL_MIN_VALUE = 0;
 const int EEPROM_HORIZONTAL_MAX_VALUE = 2;
 
+const int EEPROM_MAG_MIN_X = 10;
+const int EEPROM_MAG_MIN_Y = 12;
+const int EEPROM_MAG_MIN_Z = 14;
+
+const int EEPROM_MAG_MAX_X = 16;
+const int EEPROM_MAG_MAX_Y = 18;
+const int EEPROM_MAG_MAX_Z = 20;
+
 const byte ROWS = 4; //four rows
 const byte COLS = 3; //three columns
 
@@ -149,11 +157,28 @@ void setup() {
 	menu = Menu();
 
 	encoderHorizontal = Encoder(A5, Helpers::EEPROMReadInt(EEPROM_HORIZONTAL_MIN_VALUE), Helpers::EEPROMReadInt(EEPROM_HORIZONTAL_MAX_VALUE));
+	running_min.x = Helpers::EEPROMReadInt(EEPROM_MAG_MIN_X);
+	running_min.y = Helpers::EEPROMReadInt(EEPROM_MAG_MIN_Y);
+	running_min.z = Helpers::EEPROMReadInt(EEPROM_MAG_MIN_Z);
+
+	running_max.x = Helpers::EEPROMReadInt(EEPROM_MAG_MAX_X);
+	running_max.y = Helpers::EEPROMReadInt(EEPROM_MAG_MAX_Y);
+	running_max.z = Helpers::EEPROMReadInt(EEPROM_MAG_MAX_Z);
 
 	//encoderHorizontal = Encoder(A5, 100, 200); // should be used in final version
 
 	lcd.begin(16, 2);
 	Serial.begin(115200);
+
+	Serial.println("Magnetometr config: ");
+	Serial.println(running_min.x);
+	Serial.println(running_min.y);
+	Serial.println(running_min.z);
+
+	Serial.println(running_max.x);
+	Serial.println(running_max.y);
+	Serial.println(running_max.z);
+
 	pinMode(ledPin, OUTPUT);
 	digitalWrite(ledPin, LOW);                 // Turns the LED on.
 	numpad.begin(makeKeymap(numberKeys));
@@ -199,6 +224,12 @@ void loop() {
 
 	//TODO: analog signal noise reduction - just like in the AHRS MatLab program 
 	encoderHorizontal.Value = analogRead(encoderHorizontal.Input);
+
+	//if (encoderHorizontal.Value > encoderHorizontal.MaxValue)
+	//	encoderHorizontal.MaxValue = encoderHorizontal.Value;
+	//if (encoderHorizontal.Value < encoderHorizontal.MinValue)
+	//	encoderHorizontal.MinValue = encoderHorizontal.Value;
+
 
 	if ((millis() - timer) >= 20)  // Main loop runs at 50Hz
 	{
@@ -258,7 +289,7 @@ void loop() {
 		running_max.x = max(running_max.x, compass.m.x);
 		running_max.y = max(running_max.y, compass.m.y);
 		running_max.z = max(running_max.z, compass.m.z);
-
+		
 		snprintf(report, sizeof(report), "min: {%6d, %6d, %6d}    max: {%6d, %6d, %6d}",
 			running_min.x, running_min.y, running_min.z,
 			running_max.x, running_max.y, running_max.z);
@@ -274,8 +305,9 @@ void loop() {
 		lcd.write("Enc: ");
 		lcd.print(floor(encoderHorizontal.GetAngle()), 2);
 		lcd.write("            ");
-
 		lastEncPrintTime = millis();
+
+		printdata();
 	}
 
 	else if (menu.Step == LiveArcLength && millis() - lastEncPrintTime > 20)
@@ -288,7 +320,6 @@ void loop() {
 		lcd.write("Arc: ");
 		lcd.print(encoderHorizontal.GetArc());
 		lcd.write("            ");
-
 		lastEncPrintTime = millis();
 	}
 
@@ -302,9 +333,6 @@ void loop() {
 		lcd.write("Chord: ");
 		lcd.print(encoderHorizontal.GetChord());
 		lcd.write("            ");
-
-
-
 		lastEncPrintTime = millis();
 	}
 
@@ -325,12 +353,12 @@ void loop() {
 	else if (menu.Step == LiveDistance && millis() - lastEncPrintTime > 20)
 	{
 		lcd.setCursor(0, 0);
-		lcd.write("Head: ");
-		lcd.print(encoderHorizontal.GetHeadAngle());
+		lcd.write("Enc: ");
+		lcd.print(encoderHorizontal.GetAngle());
 		lcd.write("            ");
 		lcd.setCursor(0, 1);
 		lcd.write("X distance: ");
-		lcd.print(encoderHorizontal.GetDistance()); //TODO: 
+		lcd.print(encoderHorizontal.GetDistance()); 
 		lcd.write("            ");
 		//Serial.println(abs(encoderHorizontal.GetDistance() - encoderHorizontal.StartDistance));
 		//printdata();
@@ -349,6 +377,15 @@ void swOnState(char key) {
 	case PRESSED:
 		if (menu.Step == Start && key == '.')
 		{
+
+			running_min.x = 32767;
+			running_min.y = 32767;
+			running_min.z = 32767;		
+
+			running_max.x = -32767;
+			running_max.y = -32767;
+			running_max.z = -32767;
+
 			encoderHorizontal.MinValue = 1023;
 			encoderHorizontal.MaxValue = 0;
 			lcd.clear();
@@ -369,8 +406,24 @@ void swOnState(char key) {
 
 		else if (menu.Step == Initialize && key == '#')
 		{
-			//Helpers::EEPROMWriteInt(EEPROM_HORIZONTAL_MIN_VALUE, encoderHorizontal.MinValue);
-			//Helpers::EEPROMWriteInt(EEPROM_HORIZONTAL_MAX_VALUE, encoderHorizontal.MaxValue);
+			Helpers::EEPROMWriteInt(EEPROM_HORIZONTAL_MIN_VALUE, encoderHorizontal.MinValue);
+			Helpers::EEPROMWriteInt(EEPROM_HORIZONTAL_MAX_VALUE, encoderHorizontal.MaxValue);
+
+			Helpers::EEPROMWriteInt(EEPROM_MAG_MIN_X, running_min.x);
+			Helpers::EEPROMWriteInt(EEPROM_MAG_MIN_Y, running_min.y);
+			Helpers::EEPROMWriteInt(EEPROM_MAG_MIN_Z, running_min.z);
+			Helpers::EEPROMWriteInt(EEPROM_MAG_MAX_X, running_max.x);
+			Helpers::EEPROMWriteInt(EEPROM_MAG_MAX_Y, running_max.y);
+			Helpers::EEPROMWriteInt(EEPROM_MAG_MAX_Z, running_max.z);
+
+			Serial.println(running_min.x);
+			Serial.println(running_min.y);
+			Serial.println(running_min.z);
+
+			Serial.println(running_max.x);
+			Serial.println(running_max.y);
+			Serial.println(running_max.z);
+
 
 			lcd.clear();
 			lcd.print("Set arm lenght:");
@@ -442,10 +495,14 @@ void swOnState(char key) {
 			encoderHorizontal.SetStartAngle();
 		}
 
-		else if ((menu.Step == FixedAngle || menu.Step == LiveDistance) && key == '.')
+		else if ((menu.Step == FixedAngle) && key == '.')
 		{
 			encoderHorizontal.SetHeadStartAngle();
 			//encoderHorizontal.SetStartAngle();
+		}
+
+		else if (menu.Step == LiveDistance && key == '.' ){			
+			encoderHorizontal.SetRelativeStartHeadAngle();
 		}
 
 		else if (menu.Step == FixedAngle && key == '#')
@@ -477,8 +534,10 @@ void swOnState(char key) {
 		else if (menu.Step == SetDistance && key == '#' && textBufferCounter > 0)
 		{
 			startDistance = atof(textBuffer);
+			encoderHorizontal.SetRelativeStartHeadAngle();
 			encoderHorizontal.SetStartDistance(startDistance);
 			encoderHorizontal.SetStartAngle();
+			
 			Helpers::textClear(textBuffer);
 			textBufferCounter = 0;
 			lcd.clear();
@@ -800,7 +859,8 @@ void printdata(void)
 	Serial.print(",");*/
 	//Serial.print(ToDeg(pitch));
 	encoderHorizontal.Value = analogRead(encoderHorizontal.Input);
-	Serial.print(abs(ToDeg(yaw) + 180 - (encoderHorizontal.GetAngle())));
+
+	Serial.print(encoderHorizontal.GetHeadAngle());
 	Serial.print(",");
 	Serial.print(encoderHorizontal.GetAngle());
 	Serial.print(",");
